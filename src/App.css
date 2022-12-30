@@ -14,6 +14,36 @@
   min-height: 100vh;
 }
 
+.App-wrapper {
+  min-width: 200px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.All-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.App-selected-tag {
+  background-color: #0095ff;
+}
+
+.App-tag {
+  margin: 0.5rem;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid white;
+  padding: 0.3rem 0.5rem;
+  font-size: 15px;
+}
+
+.App-tag:hover {
+  background-color: #0095ff;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -86,7 +116,6 @@
 }
 
 .App-quiz-container {
-  max-width: 500px;
   margin: 3rem;
 }
 

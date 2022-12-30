@@ -3,98 +3,135 @@ import "./App.css";
 import data from "./data";
 
 function App() {
-  const [quizListDeque, setQuizListDeque] = useState([]);
-  const [quizListStack, setQuizListStack] = useState([]);
+  const [selectedTag, setSelectTag] = useState(["All"]);
   const [isClickedAnswer, setIsClickedAnswer] = useState(false);
 
-  const retry = () => {
+  const [quizList, setQuizList] = useState([]);
+
+  const reset = () => {
     const list = [];
 
     Object.values(data).forEach((item) => list.push(...item));
 
     list.sort(() => Math.random() - 0.5);
 
-    setQuizListDeque(() => list);
-    setQuizListStack(() => list.slice(0, -1));
+    setQuizList(() => list);
+  };
+
+  const setListByTag = () => {
+    if (selectedTag.includes("All")) return reset();
+
+    const list = [];
+
+    Object.entries(data)
+      .filter((item) => {
+        return selectedTag.includes(item[0]);
+      })
+      .forEach((item) => list.push(...item[1]));
+
+    list.sort(() => Math.random() - 0.5);
+
+    setQuizList(() => list);
+  };
+
+  const handleSelectTag = (tag) => {
+    if (tag === "All") return setSelectTag(() => ["All"]);
+    const copyArr = [...selectedTag];
+
+    if (selectedTag.includes(tag)) {
+      const filterArr = copyArr.filter((item) => item !== tag);
+
+      filterArr.length
+        ? setSelectTag(() => filterArr)
+        : setSelectTag(() => ["All"]);
+
+      return;
+    }
+
+    copyArr.push(tag);
+
+    setSelectTag(() =>
+      copyArr.filter((item) => item !== "All").sort((a, b) => a - b)
+    );
   };
 
   useEffect(() => {
-    retry();
+    reset();
   }, []);
 
   useEffect(() => {
-    if (quizListStack.length) return;
-
-    retry();
-  }, [quizListStack]);
-
-  const arrUnshift = (val) => {
-    setQuizListDeque((prev) => [val, ...prev]);
-  };
-
-  const arrPop = () => {
-    const copyArr = [...quizListDeque];
-    const dequeueValue = copyArr.pop();
-
-    setQuizListDeque(() => copyArr);
-
-    return dequeueValue;
-  };
+    setListByTag();
+  }, [selectedTag]);
 
   const handleClickNext = () => {
-    const popValue = arrPop();
+    setIsClickedAnswer(false);
 
-    arrUnshift(popValue);
+    const copyList = [...quizList];
+    const popValue = copyList.pop();
+    copyList.unshift(popValue);
 
-    setQuizListStack((prev) => [...prev, popValue]);
+    setQuizList(() => copyList);
   };
 
   const handleClickPrev = () => {
-    if (!quizListStack.length) {
-      return retry();
-    }
+    setIsClickedAnswer(false);
 
-    const copyStack = [...quizListStack];
-    const popStackValue = copyStack.pop();
-    const copyArr = [...quizListDeque, popStackValue];
+    const copyList = [...quizList];
+    const shiftValue = copyList.shift();
+    copyList.push(shiftValue);
 
-    setQuizListDeque(() => copyArr);
-    setQuizListStack(() => copyStack);
+    setQuizList(() => copyList);
   };
 
   return (
     <div className="App">
       <div className="App-container">
-        <header className="App-header">Quiz!</header>
-        {quizListDeque.length && quizListStack.length && (
-          <div className="App-quiz-container">
-            <div className="App-quiz-wrapper">
-              <div key={quizListDeque[quizListDeque.length - 1].quiz}>
-                {quizListDeque[quizListDeque.length - 1].quiz}
-              </div>
-              <div className="App-quiz-answer">
-                {isClickedAnswer &&
-                  quizListDeque[quizListDeque.length - 1].answer}
-              </div>
-            </div>
-            <div className="App-button-wrapper">
-              <div>
-                <button className="App-button" onClick={handleClickPrev}>
-                  Prev
-                </button>
-                <button className="App-button" onClick={handleClickNext}>
-                  Next
-                </button>
-              </div>
-              <button
-                className="App-button-answer"
-                onClick={() => setIsClickedAnswer(true)}
+        <div className="App-wrapper">
+          <div className="All-tags-container">
+            {["All", ...Object.keys(data)].map((item) => (
+              <span
+                className={
+                  selectedTag.includes(item)
+                    ? "App-tag App-selected-tag"
+                    : "App-tag"
+                }
+                onClick={() => handleSelectTag(item)}
+                key={item}
               >
-                Answer
-              </button>
-            </div>
+                {item}
+              </span>
+            ))}
           </div>
-        )}
+          <h2 className="App-header">Quiz!</h2>
+          {quizList.length && (
+            <div className="App-quiz-container">
+              <div className="App-quiz-wrapper">
+                <div key={quizList[quizList.length - 1].quiz}>
+                  {quizList[quizList.length - 1].quiz}
+                </div>
+                <div className="App-quiz-answer">
+                  {isClickedAnswer && quizList[quizList.length - 1].answer}
+                </div>
+              </div>
+              <div className="App-button-wrapper">
+                <div>
+                  <button className="App-button" onClick={handleClickPrev}>
+                    Prev
+                  </button>
+                  <button className="App-button" onClick={handleClickNext}>
+                    Next
+                  </button>
+                </div>
+                <button
+                  className="App-button-answer"
+                  onClick={() => setIsClickedAnswer(!isClickedAnswer)}
+                >
+                  Answer
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
