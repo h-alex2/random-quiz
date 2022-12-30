@@ -42,11 +42,9 @@ function App() {
     if (selectedTag.includes(tag)) {
       const filterArr = copyArr.filter((item) => item !== tag);
 
-      filterArr.length
+      return filterArr.length
         ? setSelectTag(() => filterArr)
         : setSelectTag(() => ["All"]);
-
-      return;
     }
 
     copyArr.push(tag);
@@ -64,7 +62,7 @@ function App() {
 
   useEffect(() => {
     setListByTag();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTag]);
 
   const handleClickNext = () => {
