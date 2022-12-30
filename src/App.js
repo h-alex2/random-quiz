@@ -3,7 +3,7 @@ import "./App.css";
 import data from "./data";
 
 function App() {
-  const [quizListQueue, setQuizListQueue] = useState([]);
+  const [quizListDeque, setQuizListDeque] = useState([]);
   const [quizListStack, setQuizListStack] = useState([]);
   const [isClickedAnswer, setIsClickedAnswer] = useState(false);
 
@@ -14,44 +14,51 @@ function App() {
 
     list.sort(() => Math.random() - 0.5);
 
-    setQuizListQueue(() => list);
-    setQuizListStack(() => list);
+    setQuizListDeque(() => list);
+    setQuizListStack(() => list.slice(0, -1));
   };
-
-  useEffect(() => {
-    setIsClickedAnswer(false);
-    if (quizListQueue.length && quizListStack.length) return;
-
-    retry();
-  }, [quizListQueue, quizListStack]);
 
   useEffect(() => {
     retry();
   }, []);
 
-  const enqueue = (val) => {
-    setQuizListQueue((prev) => [...prev, val]);
+  useEffect(() => {
+    if (quizListStack.length) return;
+
+    retry();
+  }, [quizListStack]);
+
+  const arrUnshift = (val) => {
+    setQuizListDeque((prev) => [val, ...prev]);
   };
 
-  const dequeue = () => {
-    const copyQueue = [...quizListQueue];
-    const dequeueValue = copyQueue.pop();
+  const arrPop = () => {
+    const copyArr = [...quizListDeque];
+    const dequeueValue = copyArr.pop();
 
-    setQuizListQueue(() => copyQueue);
+    setQuizListDeque(() => copyArr);
 
     return dequeueValue;
   };
 
   const handleClickNext = () => {
-    const dequeueValue = dequeue();
-    setQuizListStack((prev) => [...prev, dequeueValue]);
+    const popValue = arrPop();
+
+    arrUnshift(popValue);
+
+    setQuizListStack((prev) => [...prev, popValue]);
   };
 
   const handleClickPrev = () => {
+    if (!quizListStack.length) {
+      return retry();
+    }
+
     const copyStack = [...quizListStack];
     const popStackValue = copyStack.pop();
+    const copyArr = [...quizListDeque, popStackValue];
 
-    enqueue(popStackValue);
+    setQuizListDeque(() => copyArr);
     setQuizListStack(() => copyStack);
   };
 
@@ -59,15 +66,15 @@ function App() {
     <div className="App">
       <div className="App-container">
         <header className="App-header">Quiz!</header>
-        {quizListQueue.length && quizListStack.length && (
+        {quizListDeque.length && quizListStack.length && (
           <div className="App-quiz-container">
             <div className="App-quiz-wrapper">
-              <div key={quizListQueue[quizListQueue.length - 1].quiz}>
-                {quizListQueue[quizListQueue.length - 1].quiz}
+              <div key={quizListDeque[quizListDeque.length - 1].quiz}>
+                {quizListDeque[quizListDeque.length - 1].quiz}
               </div>
               <div className="App-quiz-answer">
                 {isClickedAnswer &&
-                  quizListQueue[quizListQueue.length - 1].answer}
+                  quizListDeque[quizListDeque.length - 1].answer}
               </div>
             </div>
             <div className="App-button-wrapper">
