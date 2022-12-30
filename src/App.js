@@ -106,7 +106,7 @@ function App() {
           {quizList.length && (
             <div className="App-quiz-container">
               <div className="App-quiz-wrapper">
-                <div key={quizList[quizList.length - 1].quiz}>
+                <div className="App-quiz-question" key={quizList[quizList.length - 1].quiz}>
                   {quizList[quizList.length - 1].quiz}
                 </div>
                 <div className="App-quiz-answer">
@@ -122,12 +122,14 @@ function App() {
                     Next
                   </button>
                 </div>
-                <button
-                  className="App-button-answer"
-                  onClick={() => setIsClickedAnswer(!isClickedAnswer)}
-                >
-                  Answer
-                </button>
+                {quizList[quizList.length - 1].answer && (
+                  <button
+                    className="App-button-answer"
+                    onClick={() => setIsClickedAnswer(!isClickedAnswer)}
+                  >
+                    Answer
+                  </button>
+                )}
               </div>
             </div>
           )}

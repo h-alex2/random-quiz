@@ -55,8 +55,27 @@
   }
 }
 
+.App-quiz-container {
+  margin: 3rem;
+}
+
+.App-quiz-question {
+  display: flex;
+  justify-content: center;
+  min-height: 100px;
+  max-height: 100px;
+}
+
 .App-quiz-answer {
-  min-height: 80px;
+  min-height: 100px;
+  max-height: 150px;
+  font-size: 15px;
+  overflow: scroll;
+}
+
+.App-button-wrapper {
+  min-height: 100px;
+  max-height: 100px;
 }
 
 .App-button {
@@ -113,18 +132,6 @@
   touch-action: manipulation;
   vertical-align: baseline;
   white-space: nowrap;
-}
-
-.App-quiz-container {
-  margin: 3rem;
-}
-
-.App-quiz-wrapper {
-  /* margin: 3rem; */
-}
-
-.App-quiz-answer {
-  font-size: 15px;
 }
 
 .App-link {
