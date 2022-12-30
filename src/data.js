@@ -330,7 +330,7 @@ const data = {
       quiz: "js와 jsx의 차이를 말해주세요.",
     },
     {
-      quiz: "CDN징에 대해 설명해주세요 ",
+      quiz: "CDN에 대해 설명해주세요 ",
     },
     {
       quiz: "ES6(2015)를 지원하지 않는 곳에서 자바스크립트를 써야한다면?",
@@ -445,7 +445,7 @@ const data = {
       quiz: "flex, grid에 대해 설명해 주세요.",
     },
     {
-      quiz: "BCSS selecto에 대해 설명해 주세요.",
+      quiz: "CSS selector에 대해 설명해 주세요.",
     },
     {
       quiz: "CSS sprite에 대해 설명해 주세요.",
