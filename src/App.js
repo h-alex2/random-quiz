@@ -52,8 +52,6 @@ function App() {
     setSelectTag(() =>
       copyArr.filter((item) => item !== "All").sort((a, b) => a - b)
     );
-
-    setListByTag();
   };
 
   useEffect(() => {
