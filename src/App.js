@@ -36,6 +36,7 @@ function App() {
 
   const handleSelectTag = (tag) => {
     if (tag === "All") return setSelectTag(() => ["All"]);
+
     const copyArr = [...selectedTag];
 
     if (selectedTag.includes(tag)) {
@@ -53,6 +54,8 @@ function App() {
     setSelectTag(() =>
       copyArr.filter((item) => item !== "All").sort((a, b) => a - b)
     );
+
+    setListByTag();
   };
 
   useEffect(() => {
@@ -61,6 +64,7 @@ function App() {
 
   useEffect(() => {
     setListByTag();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTag]);
 
   const handleClickNext = () => {
@@ -106,7 +110,10 @@ function App() {
           {quizList.length && (
             <div className="App-quiz-container">
               <div className="App-quiz-wrapper">
-                <div className="App-quiz-question" key={quizList[quizList.length - 1].quiz}>
+                <div
+                  className="App-quiz-question"
+                  key={quizList[quizList.length - 1].quiz}
+                >
                   {quizList[quizList.length - 1].quiz}
                 </div>
                 <div className="App-quiz-answer">
